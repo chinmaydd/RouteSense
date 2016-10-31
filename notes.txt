@@ -1,0 +1,10 @@
+Sensor Nodes -> Base station
+
+[*] Constructing a cost field starting at base station. 
+[*] Base station has cost 0.
+[*] Cost can represent application dependent metric: hop count, energy, latency,
+loss, etc.
+[*] Every node starts with a cost of infinity
+[*] All nodes start converging to a minimum cost.
+[*] Optimization: Delay rebroadcasting for a time proportional to link cost(?)
+[*] Susceptible to Sinkhole
