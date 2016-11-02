@@ -21,25 +21,17 @@ class MCF(NodeAlgorithm):
   required_params = ('sinkKey',)
   default_params = {}
 
-  # Header used to advertise the lowest cost.
-  ADV = "advertisement"
-
-  def step(self, node):
-    message = node.receive()
-    if message:
-      if (message.destination == None or message.destination == node):
-        # when destination is None it is broadcast message
-        return self._process_message(node, message)
-      elif (message.nexthop == node.id):
-        self._forward_message(node, message)
-
-  # Helper method to check if the message is an advertisement
+# Helper method to check if the message is an advertisement
   def check_if_adv(self, message):
     return (message.header == self.ADV or message.header == NodeAlgorithm.INI)
+
+  # Header used to advertise the lowest cost.
+  ADV = "advertisement"
 
   # Status initializer for each node.
   def initializer(self):
     for node in self.network.nodes():
+      node.memory["Timer"] = inf
       # If the node is a sink node, broadcase the message and set it to done.
       if self.sinkKey in node.memory:
         self.network.outbox.insert(0, Message(header=NodeAlgorithm.INI,
@@ -84,38 +76,51 @@ class MCF(NodeAlgorithm):
     # Either way, we will have the node transition into the "LISTENING" state
     # and implement the backoff algorithm.
     if self.check_if_adv(message):
-      node.memory["BCost"] = self.calculate_cost(message)
+      message_cost = self.calculate_cost(message)
+      node.memory["BCost"] = message_cost
+      node.memory["Timer"] = int(message_cost/2)
       node.status = "LISTENING"
     else:
       # This implies that the algorithm is now in operational mode.
       pass
 
+  def listening(self, node, message):
+    pass
+
   def done(self, node, message):
     pass
 
-  # After the node has received the first initialization message, it sets a
-  # value in its memory for the link_cost.
-  def listening(self, node, message):
-    pdb.set_trace()
-    if self.check_if_adv(message):
-      message_cost = self.calculate_cost(message)
-      if message_cost < node.memory["BCost"]:
-        node.memory["BCost"] = message_cost
-        node.memory["Timer"] = int(message_cost/2)
-      else:
-        node.memory["Timer"] -= 1
-    
-    if node.memory["Timer"] == 0:
-      node.status = "TRANSITION"
-    
-  def transition(self, node, message):
-    # Broadcast the local cost.
-    print(message)
-    node.status = "DONE"
+  def step(self, node):
+    # Standard step code
+    message = node.receive()
+    if message:
+      if (message.destination == None or message.destination == node):
+        # when destination is None it is broadcast message
+        return self._process_message(node, message)
+      elif (message.nexthop == node.id):
+        self._forward_message(node, message)
 
+    # Timer-like code.
+    # pdb.set_trace()
+    if message and node.status == "LISTENING":
+      if self.check_if_adv(message):
+        message_cost = self.calculate_cost(message)
+        # Check if the advertised cost is less than the existing.
+        if message_cost < node.memory["BCost"]:
+          # Set the new cost.
+          node.memory["BCost"] = message_cost
+          # Restart the timer.
+          node.memory["Timer"] = int(message_cost/2)
+    elif not isinf(node.memory["Timer"]) and node.status == "LISTENING":
+      # pdb.set_trace()
+      node.memory["Timer"] -= 1
+      if node.memory["Timer"] == 0:
+        # Broadcast the new message and set the status as done.
+        node.send(Message(header=self.ADV, data=str(node.memory["BCost"])))
+        node.status = "DONE"
+ 
   STATUS = {
       "IDLE": idle,
       "DONE": done,
-      "LISTENING": listening,
-      "TRANSITION": transition
+      "LISTENING": listening
       }

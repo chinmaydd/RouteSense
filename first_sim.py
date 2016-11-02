@@ -12,9 +12,16 @@ net.algorithms = ((MCFAlgorithm.MCF, {"sinkKey":"ICost"}),)
 # Setting the 0th node to be the base.
 first_node = net.nodes()[0]
 first_node.memory["ICost"] = "0"
+first_node.memory["BCost"] = "0"
 first_node.type = "B"
 
 sim = Simulation(net)
 sim.run()
+net.show()
 
 pdb.set_trace()
+
+# for node in net.nodes():
+#     print node.id
+#     print node.memory["BCost"]
+#     print "-------"
