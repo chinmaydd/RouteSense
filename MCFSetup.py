@@ -65,7 +65,7 @@ class MCFSetup(NodeAlgorithm):
     def calculate_other_cost(self, message):
         return float(message.data) + message.destination.distance[0]
 
-# After the initialization process, each node is set to an idle state.
+    # After the initialization process, each node is set to an idle state.
     # On receiving the first "ADV", the node should transition itself to the
     # listening state. 
     # This implies that further messages are received but not broadcasted.
@@ -106,15 +106,14 @@ class MCFSetup(NodeAlgorithm):
         # Timer-like code.
         if message and node.status == "LISTENING":
                 if self.check_if_adv(message):
-                    message_cost = self.calculate_cost(message)
+                    message_cost = self.calculate_other_cost(message)
                 # Check if the advertised cost is less than the existing.
                 if message_cost < node.memory["BCost"]:
-                     # Set the new cost.
+                    # Set the new cost.
                     node.memory["BCost"] = message_cost
                     # Restart the timer.
                     node.memory["Timer"] = int(message_cost/2)
         elif not isinf(node.memory["Timer"]) and node.status == "LISTENING":
-            # pdb.set_trace()
             node.memory["Timer"] -= 1
             if node.memory["Timer"] == 0:
                 # Broadcast the new message and set the status as done.

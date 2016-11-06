@@ -39,13 +39,20 @@ class MCFAlgorithm(NodeAlgorithm):
 
         return l_cost
 
+    def alternate_link_cost(self, message):
+        return message.destination.distance[-1]
+
     def idle(self, node, message):
         BCost = float(message.data.split("=")[1])
-        mlink_cost = self.link_cost(message)
-        
-        remaining_budget = BCost - mlink_cost
+        mlink_cost = self.alternate_link_cost(message)
 
-        if float(node.memory["BCost"]) <= remaining_budget:
+        remaining_budget = BCost - mlink_cost
+        diff = float(node.memory["BCost"]) - remaining_budget
+
+        # HAXXX
+        if abs(diff) <= 1:
+            print node.id
+            print "--->"
             cost_string = "MCost="+str(node.memory["BCost"])
             node.send(Message(header=self.TRA, data=cost_string))
           
@@ -56,7 +63,9 @@ class MCFAlgorithm(NodeAlgorithm):
 
     def wait(self, node, message):
         if message.header == self.TRA:
+          logger.info("-------------------------")
           logger.info("Message to sink received!")
+          logger.info("-------------------------")
 
     STATUS = {
             "WAIT": wait,
