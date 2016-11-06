@@ -51,8 +51,7 @@ class MCFAlgorithm(NodeAlgorithm):
 
         # HAXXX
         if abs(diff) <= 1:
-            print node.id
-            print "--->"
+            print str(node.id) + "----->"
             cost_string = "MCost="+str(node.memory["BCost"])
             node.send(Message(header=self.TRA, data=cost_string))
           
@@ -63,9 +62,9 @@ class MCFAlgorithm(NodeAlgorithm):
 
     def wait(self, node, message):
         if message.header == self.TRA:
-          logger.info("-------------------------")
+          print("------------------------------")
           logger.info("Message to sink received!")
-          logger.info("-------------------------")
+          print("------------------------------")
 
     STATUS = {
             "WAIT": wait,

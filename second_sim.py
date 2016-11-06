@@ -5,6 +5,7 @@ import MCFAlgorithm
 import pdb
 sys.path.append("/home/chinmay_dd/Projects/ACN.WSN/pymote2.0")
 from pymote.algorithm import Algorithm
+from pymote.node import Node
 from pymote import *
 
 # Let's work with 10 nodes.
@@ -17,13 +18,20 @@ first_node = net.nodes()[0]
 first_node.memory["BCost"] = "0"
 first_node.type = "B"
 
-malicious_node = net.nodes()[5]
-malicious_node.memory["BCost"] = "0"
+sim = Simulation(net)
+sim.run()
+
+net.algorithms = ((MCFSetup.MCFSetup, {"sinkKey":"BCost"}),
+    (MCFSetup.MCFSetup, {"sinkKey": "BCost"}),)
+
+malicious_node = Node(commRange=1000, memory={"BCost":"0"})
+net.add_node(malicious_node)
 
 sim = Simulation(net)
 sim.run()
 
-net.algorithms = ((MCFSetup.MCFSetup, {"sinkKey":"BCost"}), (MCFAlgorithm.MCFAlgorithm, {"transmitNode": "T"}),)
+net.algorithms = ((MCFSetup.MCFSetup, {"sinkKey":"BCost"}), (MCFSetup.MCFSetup,
+  {"sinkKey": "BCost"}), (MCFAlgorithm.MCFAlgorithm, {"transmitNode": "T"}),)
 
 # Choosing random numbers 3 and 9
 last_node = net.nodes()[9]
