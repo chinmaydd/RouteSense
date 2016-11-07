@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/home/chinmay_dd/Projects/ACN.WSN/pymote2.0")
+sys.path.append("../pymote2.1")
 from pymote import *
 from leach import Leach
 from pymote.algorithms.broadcast import Flood

@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/home/chinmay_dd/Projects/ACN.WSN/pymote2.0")
+sys.path.append("../pymote2.0")
 from pymote.algorithm import NodeAlgorithm
 from pymote.message import Message
 import sys

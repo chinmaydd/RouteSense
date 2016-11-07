@@ -1,6 +1,6 @@
 # Using the local development version of pymote
 import sys
-sys.path.append("/home/chinmay_dd/Projects/ACN.WSN/pymote2.0")
+sys.path.append("../pymote2.1")
 from pymote.message import Message
 from pymote.algorithm import NodeAlgorithm
 import pdb

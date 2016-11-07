@@ -3,7 +3,7 @@ import sys
 import MCFSetup
 import MCFAlgorithm
 import pdb
-sys.path.append("/home/chinmay_dd/Projects/ACN.WSN/pymote2.0")
+sys.path.append("../pymote2.1")
 from pymote.algorithm import Algorithm
 from pymote.node import Node
 from pymote import *
