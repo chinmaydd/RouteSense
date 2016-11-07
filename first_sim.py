@@ -17,9 +17,6 @@ first_node = net.nodes()[0]
 first_node.memory["BCost"] = "0"
 first_node.type = "B"
 
-malicious_node = net.nodes()[5]
-malicious_node.memory["BCost"] = "0"
-
 sim = Simulation(net)
 sim.run()
 
@@ -39,4 +36,4 @@ sim.run()
 
 net.show()
 
-pdb.set_trace()
+raw_input()
