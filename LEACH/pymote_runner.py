@@ -19,6 +19,7 @@ base_station.type = 'B'
 base_station.memory['cluster_head'] = ''
 base_station.memory['cluster_nodes'] = net.nodes()
 base_station.memory['aggregate_data'] = []
+base_station.memory['attacker'] = False
 index = 0
 pointer = -1
 
@@ -49,9 +50,11 @@ while True:
            if 'cluster_head' not in member_node.memory:
                member_node.type = 'N'
                member_node.memory['cluster_head'] = cluster_head
+               member_node.memory['attacker'] = False
                member_node.memory['cluster_nodes'] = []
                cluster_nodes.append(member_node)
        cluster_head.memory['cluster_nodes'] = cluster_nodes
+       cluster_head.memory['attacker'] = False
        cluster_heads.append(cluster_head)
     index = (index + 1) % (NETWORK_SIZE)
 
@@ -59,6 +62,7 @@ while True:
         break
 
 print cluster_heads
+#cluster_heads[0].memory['attacker'] = True
 # Testing simulation
 src = base_station
 src.memory['I'] = 'Request for data'

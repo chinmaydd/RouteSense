@@ -21,6 +21,10 @@ first_node.type = "B"
 sim = Simulation(net)
 sim.run()
 
+net.show()
+
+raw_input()
+
 net.algorithms = ((MCFSetup.MCFSetup, {"sinkKey":"BCost"}),
     (MCFSetup.MCFSetup, {"sinkKey": "BCost"}),)
 
@@ -29,6 +33,10 @@ net.add_node(malicious_node)
 
 sim = Simulation(net)
 sim.run()
+
+net.show()
+
+raw_input()
 
 net.algorithms = ((MCFSetup.MCFSetup, {"sinkKey":"BCost"}), (MCFSetup.MCFSetup,
   {"sinkKey": "BCost"}), (MCFAlgorithm.MCFAlgorithm, {"transmitNode": "T"}),)

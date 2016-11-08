@@ -96,6 +96,7 @@ class Simulation(QThread):
     def is_halted(self):
         """ Check if distributed algorithm have come to end or deadlock
             i.e. no messages to pass.
+        """
         try:
             base_station = self.network.nodes()[100]
             if base_station.status == "DONE":
@@ -103,8 +104,6 @@ class Simulation(QThread):
                 return True
         except Exception as e:
             pass
-        pdb.set_trace()
-        """
         if len(self._network.outbox) > 0 or \
            any([len(node.outbox) for node in self.network.nodes()]) or \
            any([len(node.inbox) for node in self.network.nodes()]) or \
