@@ -46,7 +46,7 @@ class Leach(NodeAlgorithm):
                 if node.memory['recv_count'] == 9:
                     dst = node.memory['cluster_head']
                     nodeIds = node.memory['aggregate_data']
-                    if node.memory['attacker'] = True:
+                    if node.memory['attacker'] == True:
                         nodeIds = 'BLOCKED'
                     node.send(Message(header='Information', data=nodeIds, destination=dst))
 
